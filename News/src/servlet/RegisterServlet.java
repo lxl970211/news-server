@@ -2,9 +2,11 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.MessageDigest;
 
 import javabean.User;
 
+import javax.mail.internet.NewsAddress;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,8 +35,7 @@ public class RegisterServlet extends HttpServlet {
 		String type = request.getParameter("type");
 		String user_email = request.getParameter("user_email");
 		String password = request.getParameter("user_password");
-	
-		System.out.println(password);
+		
 		if ("register".equals(type)) {
 				
 				
@@ -46,13 +47,14 @@ public class RegisterServlet extends HttpServlet {
 				user.setEmail(user_email);
 				user.setPassword(password);
 				
-				
+				//返回注册结果给客户端
 				out.println(Utils.registeruser(user));
 			
 		}else if("email".equals(type)){
 			//验证注册时邮箱是否存在
 			if (user_email != null){
 				String sql = "select user_email from news_user where user_email='"+user_email+"'";
+				
 				out.println(Utils.returnRequestJson(linkDb.findUserEmailExist(sql)));
 			}
 		}
@@ -66,5 +68,8 @@ public class RegisterServlet extends HttpServlet {
 		doGet(request, response);
 
 	}
+	
+
+
 
 }

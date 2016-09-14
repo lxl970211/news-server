@@ -1,5 +1,6 @@
 package database;
 
+import java.nio.channels.SelectableChannel;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,7 +9,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.LoggingPermission;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import utils.Constant;
+import utils.Utils;
 
 import javabean.User;
 
@@ -71,7 +76,11 @@ public class LinkDb {
 		return isExist;
 	}
 	
-	
+	/**
+	 * 注册用户
+	 * @param sql
+	 * @return
+	 */
 	public int registerUser(String sql){
 		
 		conn = link();
@@ -91,12 +100,67 @@ public class LinkDb {
 		
 	}
 	
+	public boolean loginUser(String useremail, String userPassword){
+		String sql = "select * from news_user where user_email='"+useremail+"' and user_password='"+userPassword+"';";
+		
+		conn = link();
+		try {
+			stat = conn.createStatement();
+			res = stat.executeQuery(sql);
+			if(res.next()){
+				
+				String name = res.getString(1);
+				return true; 
+			}
+		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			//关闭连接
+			close(conn, stat, res);
+		}
+		
+		
+		return false;
+		
+	}
+	/**
+	 * 保存token
+	 * @param token
+	 * @return
+	 */
+	public boolean saveToken(String token){
+		String insertToken = "insert into token values('"+token+"');";
+		String selectToken = "select token from token where token='"+token+"'";
+		conn = link();
+		try {
+			stat = conn.createStatement();
+			res = stat.executeQuery(selectToken);
+			if (!res.next()) {
+				stat.execute(insertToken);
+			}
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			//关闭数据库连接
+			close(conn, stat);
+		}
+		
+		return false;
+		
+	}
+	
+	
+	
 	/**
 	 * 关闭数据库连接
 	 * @param conn
 	 * @param stat
 	 * @param res
 	 */
+
 	public void close(Connection conn, Statement stat, ResultSet res){
 		try {
 			if (conn != null) {
@@ -146,6 +210,8 @@ public class LinkDb {
 		
 
 	}
+
+
 	
 	
 	

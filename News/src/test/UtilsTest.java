@@ -2,6 +2,8 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.io.UnsupportedEncodingException;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,9 +17,18 @@ public class UtilsTest {
 		utils = new Utils();
 	}
 
+
+	
 	@Test
-	public void testReturnRequestJson() {
-		System.out.println(utils.returnRequestJson(1));
+	public void MD5Test(){
+		
+		String a = "liuxiaolong0211";
+        String pwd = "long0211";
+        System.out.println(utils.MD5(a+pwd));
+		
+		
 	}
+	
+
 
 }
