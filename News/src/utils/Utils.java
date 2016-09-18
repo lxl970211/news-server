@@ -19,30 +19,15 @@ public class Utils {
 	 * @param isExist
 	 * @return
 	 */
-	public static String returnRequestJson(int isExist){
+	public static String returnRequestJson(Responsecodes responsecodes){
 		Gson gson = new Gson();
-		Responsecodes responsecodes = new Responsecodes();
-		responsecodes.setStatus(String.valueOf(isExist));
 		
 		return gson.toJson(responsecodes, Responsecodes.class);
 		
 	}
 	
 	
-	public static String registeruser(User user){
-		System.out.println(user.getName());
-		String sql = "insert into news_user values('"+user.getName()+"', '"+user.getEmail()+"', '"+user.getPassword()+"');";
-		Gson gson = new Gson();
-		Responsecodes res = new Responsecodes();
-		
-		res.setStatus(String.valueOf(new LinkDb().registerUser(sql)));
-		
-	
-		return gson.toJson(res, Responsecodes.class);
-		
-		
-		
-	}
+
 	
 	
 	

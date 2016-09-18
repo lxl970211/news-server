@@ -30,7 +30,7 @@ public class LinkDb {
 	Connection conn = null;
 	Statement stat = null;
 	ResultSet res = null;
-	
+	PreparedStatement preparedStatement = null;
 	
 	/**
 	 * 链接MySql数据库
@@ -38,9 +38,7 @@ public class LinkDb {
 	 */
 	public Connection link(){
 		
-		
 		try {
-			
 			Class.forName(mySqlDriver);
 			conn = DriverManager.getConnection(linkMySql, username, passWord);
 			
@@ -51,167 +49,76 @@ public class LinkDb {
 	}
 	
 	/**
-	 * 查询用户邮箱是否存在 不存在：0 存在：1
+	 * 查询数据是否存在
 	 * @param sql
 	 * @return
 	 */
-	public int findUserEmailExist(String sql){
-		int isExist = 0;
+	public boolean checkDataExists(String sql){
+		
 		conn = link();
 		try {
 			stat = conn.createStatement();
 			res = stat.executeQuery(sql);
 			if (res.next()) {
-				isExist = 1;
+				return true;
 			}
 			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
-			close(conn, stat, res);
+			CloseDatabase.close(conn, stat, res);
 		}
 		
 		
-		return isExist;
+		return false;
 	}
 	
 	/**
-	 * 注册用户
+	 * 插入数据
 	 * @param sql
 	 * @return
 	 */
-	public int registerUser(String sql){
+	public boolean insertData(String sql){
 		
 		conn = link();
 		try {
-			PreparedStatement pre = conn.prepareStatement(sql);
-			pre.executeUpdate();
-			return Constant.REGISTER_AUCCESS;
+			preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.executeUpdate();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
-			
-			close(conn, stat);
+			CloseDatabase.close(conn, preparedStatement);
 		}
 		
 		
-		return Constant.REGISTER_ERROR;
+		return false;
 		
 	}
-	
-	public boolean loginUser(String useremail, String userPassword){
-		String sql = "select * from news_user where user_email='"+useremail+"' and user_password='"+userPassword+"';";
-		
+	/**
+	 * 查询数据是否存在
+	 * @param sql
+	 * @return
+	 */
+	public boolean queryData(String sql){
 		conn = link();
 		try {
 			stat = conn.createStatement();
 			res = stat.executeQuery(sql);
 			if(res.next()){
-				
-				String name = res.getString(1);
 				return true; 
 			}
-		
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
 			//关闭连接
-			close(conn, stat, res);
-		}
-		
-		
-		return false;
-		
-	}
-	/**
-	 * 保存token
-	 * @param token
-	 * @return
-	 */
-	public boolean saveToken(String token){
-		String insertToken = "insert into token values('"+token+"');";
-		String selectToken = "select token from token where token='"+token+"'";
-		conn = link();
-		try {
-			stat = conn.createStatement();
-			res = stat.executeQuery(selectToken);
-			if (!res.next()) {
-				stat.execute(insertToken);
-			}
-			return true;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}finally{
-			//关闭数据库连接
-			close(conn, stat);
+			CloseDatabase.close(conn, stat, res);
 		}
 		
 		return false;
 		
 	}
-	
-	
-	
-	/**
-	 * 关闭数据库连接
-	 * @param conn
-	 * @param stat
-	 * @param res
-	 */
-
-	public void close(Connection conn, Statement stat, ResultSet res){
-		try {
-			if (conn != null) {
-				
-				conn.close();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			if (stat != null) {
-				stat.close();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		
-		try {
-			if (res != null) {
-				res.close();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
-	public void close(Connection conn, Statement stat){
-		try {
-			if (conn != null) {
-				
-				conn.close();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			if (stat != null) {
-				stat.close();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-
-	}
-
-
 	
 	
 	
