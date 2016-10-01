@@ -18,6 +18,7 @@ import utils.Constant;
 import utils.Utils;
 
 import database.LinkDb;
+import database.Sql;
 
 public class LoginServlet extends HttpServlet {
 	private LinkDb linkDb;
@@ -44,9 +45,9 @@ public class LoginServlet extends HttpServlet {
 		String usersql = "select * from news_user where user_email='"+user_email+"' and user_password='"+user_password+"';"; 
 		//查询数据是否存在
 		if (linkDb.queryData(usersql)) {
-			String querytoken = "select * from token where token='"+token+"'";
+			
 			//如果token不存在则保存一条新的token
-			if (!linkDb.queryData(querytoken)) {
+			if (!Sql.queryToken(token)) {
 				String insertToken = "insert into token values('"+user_email+"', '"+token+"');";
 				linkDb.insertData(insertToken);
 			}

@@ -2,6 +2,8 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,11 +19,7 @@ public class LinkDbTest {
 		linkDb = new LinkDb();
 	}
 
-	@Test
-	public void checkDataExistsTest(){
-		String sql = "select * from news_user where user_email='lxl97011@outlook.com';";
-		assertEquals(true, linkDb.checkDataExists(sql));
-	}
+
 	
 	@Test
 	public void insertDataTest(){
@@ -33,7 +31,12 @@ public class LinkDbTest {
 		assertEquals(true, linkDb.insertData(sql));
 		
 	}
+	@Test
+	public void imageTest(){
+		
 	
+		File file = new File("E:\\databasesData\\bing.jpg");
+	}
 
 
 }

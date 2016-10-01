@@ -21,7 +21,6 @@ import utils.Utils;
 import database.LinkDb;
 
 public class RegisterServlet extends HttpServlet {
-	//http://localhost:8080/News/servlet/RegisterServlet?type=register&user_email=lxl970@outlook.com&user_name=%E5%88%98%E5%B0%8F%E9%BE%99&user_password=liuxiaolong
 	private LinkDb linkDb;
 	private Responsecodes rescode;
 	public RegisterServlet(){
@@ -48,11 +47,11 @@ public class RegisterServlet extends HttpServlet {
 				User user = new User();
 //				String name = new String(request.getParameter("user_name").getBytes("iso-8859-1"),"utf-8");
 				
-				user.setName(request.getParameter("user_name"));
-				user.setEmail(user_email);
-				user.setPassword(password);
+				user.setUserName(request.getParameter("user_name"));
+				user.setUserEmail(user_email);
+				user.setUserPassword(password);
 				
-				String sql = "insert into news_user values('"+user.getName()+"', '"+user.getEmail()+"', '"+user.getPassword()+"');";
+				String sql = "insert into news_user(user_name,user_email,user_password) values('"+user.getUserName()+"', '"+user.getUserEmail()+"', '"+user.getUserPassword()+"');";
 				
 				int result = linkDb.insertData(sql) ? Constant.REGISTER_AUCCESS : Constant.REGISTER_ERROR;
 				
@@ -66,7 +65,7 @@ public class RegisterServlet extends HttpServlet {
 			if (user_email != null){
 				String sql = "select user_email from news_user where user_email='"+user_email+"';";
 				
-				int resultcode = linkDb.checkDataExists(sql) ? Constant.EMAILL_EXIST : Constant.EMAILL_UNEXIST;
+				int resultcode = linkDb.queryData(sql) ? Constant.EMAILL_EXIST : Constant.EMAILL_UNEXIST;
 				
 				rescode.setStatus(resultcode);
 				out.println(Utils.returnRequestJson(rescode));

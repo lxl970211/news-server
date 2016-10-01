@@ -2,7 +2,17 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Enumeration;
+
+import javax.mail.internet.InternetAddress;
+import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,12 +31,9 @@ public class UtilsTest {
 	
 	@Test
 	public void MD5Test(){
-		
-		String a = "liuxiaolong0211";
-        String pwd = "long0211";
-        System.out.println(utils.MD5(a+pwd));
-		
-		
+		String aString = "/News";
+		System.out.println(aString.replace("/", ""));
+       
 	}
 	
 

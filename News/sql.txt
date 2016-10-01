@@ -1,0 +1,22 @@
+create database news character set gbk collate gbk_bin;
+create table news_user(
+	user_name varchar(20) not null,
+	user_email varchar(50) not null,
+	user_password char(100) not null,
+	user_headpath varchar(100),
+	primary key(user_email),
+	unique key(user_email)
+);
+
+CREATE TABLE token (
+	user_email  varchar(50) CHARACTER SET gbk COLLATE gbk_bin NULL ,
+	token  varchar(255) NULL ,
+	FOREIGN KEY (user_email) REFERENCES news_user (user_email)
+)
+CREATE TABLE news_user_collectnews (
+	user_email  varchar(50) CHARACTER SET gbk COLLATE gbk_bin NOT NULL ,
+	url  varchar(255) NOT NULL ,
+	title  varchar(255) NOT NULL ,
+	collectTime  varchar(20) NOT NULL ,
+	FOREIGN KEY (user_email) REFERENCES news_user (user_email)
+)

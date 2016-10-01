@@ -48,31 +48,6 @@ public class LinkDb {
 		return conn;
 	}
 	
-	/**
-	 * 查询数据是否存在
-	 * @param sql
-	 * @return
-	 */
-	public boolean checkDataExists(String sql){
-		
-		conn = link();
-		try {
-			stat = conn.createStatement();
-			res = stat.executeQuery(sql);
-			if (res.next()) {
-				return true;
-			}
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}finally{
-			CloseDatabase.close(conn, stat, res);
-		}
-		
-		
-		return false;
-	}
 	
 	/**
 	 * 插入数据
