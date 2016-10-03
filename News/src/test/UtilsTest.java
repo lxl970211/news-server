@@ -36,6 +36,11 @@ public class UtilsTest {
        
 	}
 	
-
+	@Test
+	public void collectNewsList(){
+		
+		
+		
+	}
 
 }

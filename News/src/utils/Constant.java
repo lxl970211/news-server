@@ -14,4 +14,7 @@ public class Constant {
 	public static final int LOGIN_ERROR = 102;
 	//login auccess
 	public static final int LOGIN_AUCCESS = 103;
+	
+    public static final String APPKEYS = "36e3354e519719700563b16e67cf04cd";
+
 }

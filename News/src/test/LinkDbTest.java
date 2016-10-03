@@ -11,6 +11,7 @@ import org.junit.Test;
 import utils.Utils;
 
 import database.LinkDb;
+import database.RequestUserInfoDB;
 
 public class LinkDbTest {
 	private LinkDb linkDb;
@@ -36,6 +37,13 @@ public class LinkDbTest {
 		
 	
 		File file = new File("E:\\databasesData\\bing.jpg");
+	}
+	
+	@Test
+	public void deletedataTest(){
+		String user_email = new RequestUserInfoDB().queryUserEmail("Moto G 2014 LTEf8:cf:c5:df:44:bc5bb7d523170017ec97e052ebce5684b9");
+		String sqlString = "delete from news_user_collectnews where user_email='"+user_email+"' and url='http://mini.eastday.com/mobile/161001194103288.html?qid=juheshuju';";
+		System.out.println(linkDb.deleteData(sqlString));
 	}
 
 

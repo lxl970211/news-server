@@ -94,7 +94,20 @@ public class LinkDb {
 		return false;
 		
 	}
-	
+	public boolean deleteData(String sql){
+		conn = link();
+		try {
+			stat = conn.createStatement();
+			stat.execute(sql);
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			CloseDatabase.close(conn, preparedStatement);
+		}
+		
+		return false;
+	}
 	
 	
 }

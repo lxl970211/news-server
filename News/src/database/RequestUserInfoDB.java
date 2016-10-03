@@ -5,9 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.mail.search.FromStringTerm;
 
+import javabean.CollectNewsBean;
+import javabean.CollectNewsData;
 import javabean.Responsecodes;
 import javabean.User;
 
@@ -48,6 +52,55 @@ public class RequestUserInfoDB {
 		
 		
 		return user;
+	}
+	
+	//≤È—Ø”√ªß” œ‰
+	public String queryUserEmail(String token){
+		String sql = "select user_email from token where token='"+token+"';";
+		conn = linkDb.link();
+		try {
+			stat = conn.createStatement();
+			res = stat.executeQuery(sql);
+			if (res.next()) {
+				return res.getString(1);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			CloseDatabase.close(conn, prestate, res);
+		}
+		
+		return null;
+		
+	}
+	
+	
+	
+	public List<CollectNewsData> getUserCollectNewsList(String email){
+		List<CollectNewsData> list = new ArrayList<CollectNewsData>();
+		String sql = "select url, title, collectTime from news_user_collectnews where user_email='"+email+"';";
+		conn = linkDb.link();
+		try {
+			stat = conn.createStatement();
+			res = stat.executeQuery(sql);
+			while(res.next()){
+				CollectNewsData collectNewsData = new CollectNewsData();
+			
+				collectNewsData.setUrl(res.getString(1));
+				collectNewsData.setTitle(res.getString(2));
+				collectNewsData.setCollectTime(res.getString(3));
+				list.add(collectNewsData);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			CloseDatabase.close(conn, prestate, res);
+		}
+	
+		return list;
+		
+		
 	}
 	
 }
