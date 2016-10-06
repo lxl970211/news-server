@@ -37,13 +37,15 @@ public class RequestUserInfoDB {
 			//先查询出token对应的用户邮箱 通过邮箱查询出用户其他信息
 			if (res.next()) {
 				String email = res.getString(1); 
-				String queryuser = "select user_name, user_headpath from news_user where user_email='"+email+"';";
+				String queryuser = "select user_name, user_email, user_headpath from news_user where user_email='"+email+"';";
 				res = stat.executeQuery(queryuser);
 				if (res.next()) {
 					//用户姓名
 					user.setUserName(res.getString(1));
+					//邮箱
+					user.setUserEmail(res.getString(2));
 					//用户头像保存路径
-					user.setHeadPath(res.getString(2));
+					user.setHeadPath(res.getString(3));
 				}
 			}
 		} catch (SQLException e) {
