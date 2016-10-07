@@ -15,6 +15,9 @@ public class Constant {
 	//login auccess
 	public static final int LOGIN_AUCCESS = 103;
 	
-    public static final String APPKEYS = "36e3354e519719700563b16e67cf04cd";
+    //评论成功
+    public static final int COMMENT_AUCCESS = 104;
+    //评论失败
+    public static final int COMMENT_ERROR = 105;
 
 }

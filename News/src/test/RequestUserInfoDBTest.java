@@ -7,6 +7,7 @@ import java.util.List;
 
 import javabean.CollectNewsBean;
 import javabean.CollectNewsData;
+import javabean.Comment;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +38,7 @@ public class RequestUserInfoDBTest {
 	@Test
 	public void getUserCollectNewsListTest(){
 		Gson gson = new Gson();
-		List<CollectNewsData> list = requestUserInfoDB.getUserCollectNewsList("root@outlook.com");
+		List<Object> list = requestUserInfoDB.getUserCollectNewsList("root@outlook.com");
 		CollectNewsBean collectNewsBean = new CollectNewsBean();
 
 		for (int i = 0; i < list.size(); i++) {
@@ -45,6 +46,12 @@ public class RequestUserInfoDBTest {
 			
 		}
 		System.out.println(gson.toJson(collectNewsBean));
+	}
+	
+	
+	@Test
+	public void getAllCommentByUrlTest(){
+
 	}
 
 }

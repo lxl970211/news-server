@@ -12,6 +12,7 @@ import javax.mail.search.FromStringTerm;
 
 import javabean.CollectNewsBean;
 import javabean.CollectNewsData;
+import javabean.Comment;
 import javabean.Responsecodes;
 import javabean.User;
 
@@ -79,8 +80,8 @@ public class RequestUserInfoDB {
 	
 	
 	
-	public List<CollectNewsData> getUserCollectNewsList(String email){
-		List<CollectNewsData> list = new ArrayList<CollectNewsData>();
+	public List<Object> getUserCollectNewsList(String email){
+		List<Object> list = new ArrayList<Object>();
 		String sql = "select url, title, collectTime from news_user_collectnews where user_email='"+email+"';";
 		conn = linkDb.link();
 		try {
@@ -88,7 +89,6 @@ public class RequestUserInfoDB {
 			res = stat.executeQuery(sql);
 			while(res.next()){
 				CollectNewsData collectNewsData = new CollectNewsData();
-			
 				collectNewsData.setUrl(res.getString(1));
 				collectNewsData.setTitle(res.getString(2));
 				collectNewsData.setCollectTime(res.getString(3));
@@ -103,6 +103,40 @@ public class RequestUserInfoDB {
 		return list;
 		
 		
+	}
+	
+	
+	/**
+	 * 根据url查询出所有该新闻的评论信息
+	 * @param url
+	 * @return
+	 */
+	public List<Comment> getAllCommentByUrl(String url){
+		List<Comment> list = new ArrayList<Comment>();
+		String sql = "select name, newsId, commentTime, content, zan, contra from news_comment where newsId='"+url+"';";
+		conn = linkDb.link();
+		
+		try {
+			stat = conn.createStatement();
+			res = stat.executeQuery(sql);
+			while (res.next()) {
+				Comment commentBean = new Comment();
+				commentBean.setName(res.getString(1));
+				commentBean.setNewsId(res.getString(2));
+				commentBean.setCommentTime(res.getString(3));
+				commentBean.setContent(res.getString(4));
+				commentBean.setZan(res.getInt(5));
+				commentBean.setContra(res.getInt(6));
+				list.add(commentBean);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			CloseDatabase.close(conn, prestate, res);
+		}
+		
+		return list;
 	}
 	
 }

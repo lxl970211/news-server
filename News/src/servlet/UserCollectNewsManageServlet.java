@@ -91,7 +91,7 @@ public class UserCollectNewsManageServlet extends HttpServlet {
 			RequestUserInfoDB requestUserInfoDB = new RequestUserInfoDB();
 			String email = requestUserInfoDB.queryUserEmail(token);  
 			Gson gson = new Gson();
-			List<CollectNewsData> list = requestUserInfoDB.getUserCollectNewsList(email);
+			List<Object> list = requestUserInfoDB.getUserCollectNewsList(email);
 			CollectNewsBean collectNewsBean = new CollectNewsBean();
 
 			for (int i = 0; i < list.size(); i++) {

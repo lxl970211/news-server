@@ -4,13 +4,13 @@ import java.util.List;
 
 public class CollectNewsBean {
 	
-	private List<CollectNewsData> list;
+	private List<Object> list;
 	
-	public List<CollectNewsData> getList() {
+	public List<Object> getList() {
 		return list;
 	}
 	
-	public void setList(List<CollectNewsData> list) {
+	public void setList(List<Object> list) {
 		this.list = list;
 	}
 	
