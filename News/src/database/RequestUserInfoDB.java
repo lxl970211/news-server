@@ -113,21 +113,22 @@ public class RequestUserInfoDB {
 	 */
 	public List<Comment> getAllCommentByUrl(String url){
 		List<Comment> list = new ArrayList<Comment>();
-		String sql = "select name, newsId, commentTime, content, zan, contra from news_comment where newsId='"+url+"';";
+		String sql = "select name, newsId, commentTime, content, zan, contra, lou from news_comment where newsId='"+url+"' ORDER BY commentTime DESC;";
 		conn = linkDb.link();
 		
 		try {
 			stat = conn.createStatement();
 			res = stat.executeQuery(sql);
 			while (res.next()) {
-				Comment commentBean = new Comment();
-				commentBean.setName(res.getString(1));
-				commentBean.setNewsId(res.getString(2));
-				commentBean.setCommentTime(res.getString(3));
-				commentBean.setContent(res.getString(4));
-				commentBean.setZan(res.getInt(5));
-				commentBean.setContra(res.getInt(6));
-				list.add(commentBean);
+				Comment comment = new Comment();
+				comment.setName(res.getString(1));
+				comment.setNewsId(res.getString(2));
+				comment.setCommentTime(res.getString(3));
+				comment.setContent(res.getString(4));
+				comment.setZan(res.getInt(5));
+				comment.setContra(res.getInt(6));
+				comment.setLou(res.getInt(7));
+				list.add(comment);
 			}
 			
 		} catch (SQLException e) {
@@ -137,6 +138,31 @@ public class RequestUserInfoDB {
 		}
 		
 		return list;
+	}
+	
+	
+	
+	
+	public int getCommentCountByUrl(String url){
+		String sql = "select count(newsId) from news_comment where newsId='"+url+"';";
+		conn = linkDb.link();
+		
+		try {
+			stat = conn.createStatement();
+			res = stat.executeQuery(sql);
+			if (res.next()) {
+				return res.getInt(1);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			CloseDatabase.close(conn, prestate, res);
+		}
+		
+		
+		return 0;
+		
 	}
 	
 }

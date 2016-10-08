@@ -1,5 +1,7 @@
 package javabean;
 
+import java.util.Set;
+
 public class Comment {
 	 private String token;
 	    private String name;
@@ -8,7 +10,8 @@ public class Comment {
 	    private int zan;
 	    private String newsId;//以新闻url为id
 	    private int contra;
-
+	    private Integer lou;
+	    
 	    public String getToken() {
 	        return token;
 	    }
@@ -61,5 +64,13 @@ public class Comment {
 		}
 	    public int getContra() {
 			return contra;
+		}
+	    
+	    
+	    public Integer getLou() {
+			return lou;
+		}
+	    public void setLou(Integer lou) {
+			this.lou = lou;
 		}
 }

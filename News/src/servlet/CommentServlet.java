@@ -49,15 +49,17 @@ public class CommentServlet extends HttpServlet {
 		String commentTime = request.getParameter("commentTime");
 		String content = request.getParameter("content");
 		String sql = null;
-		System.out.println(type);
 		if(type.equals("sendComment")){
+			
+			int lou = requestUserInfoDB.getCommentCountByUrl(newsId);
+			
 			if(token != null){
 				if (Sql.queryToken(token)) {
 					User user = requestUserInfoDB.queryUserInfo(token);
-					sql = "insert into news_comment(name, news_email, newsId, commentTime, content) values('"+user.getUserName()+"','"+user.getUserEmail()+"', '"+newsId+"', '"+commentTime+"', '"+content+"');";
+					sql = "insert into news_comment(name, news_email, newsId, commentTime, content, lou) values('"+user.getUserName()+"','"+user.getUserEmail()+"', '"+newsId+"', '"+commentTime+"', '"+content+"', '"+(++lou)+"');";
 				}
 			}else{
-				sql = "insert into news_comment(name, newsId, commentTime, content) values('"+name+"', '"+newsId+"', '"+commentTime+"', '"+content+"');";
+				sql = "insert into news_comment(name, newsId, commentTime, content, lou) values('"+name+"', '"+newsId+"', '"+commentTime+"', '"+content+"', '"+(++lou)+"');";
 				
 			}
 			Responsecodes res = new Responsecodes();
@@ -73,17 +75,11 @@ public class CommentServlet extends HttpServlet {
 		}else if(type.equals("commentList")){
 			
 			List<Comment> list = requestUserInfoDB.getAllCommentByUrl(newsId);
-			if (list != null) {
-				
 				Gson gson = new Gson();
 				CommentBean commentBean = new CommentBean();
 				commentBean.setList(list);
+				commentBean.setCommentCount(list.size());
 				out.println(gson.toJson(commentBean));
-				
-			}else{
-				out.println(0);
-				System.out.println("0");
-			}
 		}
 		
 		

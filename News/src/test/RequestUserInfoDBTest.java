@@ -2,6 +2,7 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import org.junit.Test;
 
 import com.google.gson.Gson;
 
+import database.LinkDb;
 import database.RequestUserInfoDB;
 
 public class RequestUserInfoDBTest {
@@ -51,7 +53,13 @@ public class RequestUserInfoDBTest {
 	
 	@Test
 	public void getAllCommentByUrlTest(){
-
+			String urlString = "http://mini.eastday.com/mobile/16100815552.html?qid=juheshuju";
+			System.out.println(requestUserInfoDB.getCommentCountByUrl(urlString));
+			int i = 0;
+			int a = 0;
+			System.out.println(i++);
+			System.out.println(++a);
+			System.out.println(i);
 	}
 
 }
