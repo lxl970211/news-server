@@ -9,9 +9,8 @@ public class Comment {
 	    private String content;
 	    private int like;
 	    private String newsId;//以新闻url为id
-	    private int contra;
 	    private Integer lou;
-	    private String type;
+	    private String title;
 	    public String getToken() {
 	        return token;
 	    }
@@ -58,13 +57,7 @@ public class Comment {
 	    public String getNewsId() {
 	        return newsId;
 	    }
-	    public void setContra(int contra) {
-			this.contra = contra;
-		}
-	    public int getContra() {
-			return contra;
-		}
-	    
+
 	    
 	    public Integer getLou() {
 			return lou;
@@ -74,11 +67,12 @@ public class Comment {
 		}
 	    
 	    
-	    public void setType(String type) {
-			this.type = type;
+	    
+	    public void setTitle(String title) {
+			this.title = title;
 		}
 	    
-	    public String getType() {
-			return type;
+	    public String getTitle() {
+			return title;
 		}
 }

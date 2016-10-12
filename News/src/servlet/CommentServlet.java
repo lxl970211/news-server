@@ -2,6 +2,10 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javabean.CollectNewsBean;
@@ -49,40 +53,46 @@ public class CommentServlet extends HttpServlet {
 		String commentTime = request.getParameter("commentTime");
 		String content = request.getParameter("content");
 		String lou = request.getParameter("lou");
-		String sql = null;
+		String title = request.getParameter("title");
+		
 		
 		Responsecodes res = new Responsecodes();
 		Gson gson = new Gson();
-		
+		//通过token获取用户邮箱id
 		String email = requestUserInfoDB.queryUserEmail(token);
-		
-		
+		ResultSet resSet;
+	
 		String queryAnnal = "select * from news_like where user_email='"+email+"' and lou='"+lou+"' and newsId='"+newsId+"'; ";
 		
-		if(type.equals("sendComment")){
+		if(type.equals("writeComment")){
+			String sql = null;
+			//根据新闻url获取该新闻评论数量
 			String querysql = "select count(newsId) from news_comment where newsId='"+newsId+"';";
 			int loucoumt = requestUserInfoDB.getCount(querysql);
 			
 			if(token != null){
 				if (Sql.queryToken(token)) {
 					User user = requestUserInfoDB.queryUserInfo(token);
-					sql = "insert into news_comment(name, news_email, newsId, commentTime, content, lou) values('"+user.getUserName()+"','"+user.getUserEmail()+"', '"+newsId+"', '"+commentTime+"', '"+content+"', '"+(++loucoumt)+"');";
+					sql = "insert into news_comment(name, news_email, newsId, title, commentTime, content, lou)"; 
+					sql += "values('"+user.getUserName()+"','"+user.getUserEmail()+"', '"+newsId+"', '"+title+"', '"+commentTime+"', '"+content+"', '"+(++loucoumt)+"');";
 				}
 			}else{
-				sql = "insert into news_comment(name, newsId, commentTime, content, lou) values('"+name+"', '"+newsId+"', '"+commentTime+"', '"+content+"', '"+(++loucoumt)+"');";
+				sql = "insert into news_comment(name, newsId, title, commentTime, content, lou)"; 
+				sql += "values('"+name+"', '"+newsId+"', '"+title+"', '"+commentTime+"', '"+content+"', '"+(++loucoumt)+"');";
 				
 			}
 			
 			if (linkDb.insertData(sql)) {
-				
+				//评论成功
 				res.setStatus(Constant.COMMENT_AUCCESS);
 				out.println(Utils.returnRequestJson(res));
 			}else{
+				//评论失败
 				res.setStatus(Constant.COMMENT_ERROR);
 				out.println(Utils.returnRequestJson(res));
 			}
 			
-		}else if(type.equals("commentList")){
+		}else if(type.equals("commentList")){	//获取新闻评论列表
 			
 			List<Comment> list = requestUserInfoDB.getAllCommentByUrl(newsId);
 				
@@ -112,6 +122,36 @@ public class CommentServlet extends HttpServlet {
 				
 			}
 			out.println(gson.toJson(res));
+		}else if (type.equals("userCommentList")) {
+			String sql = "select newsId, title, commentTime, content, zan, lou from news_comment where news_email = '"+email+"';";
+			
+			resSet = requestUserInfoDB.getUserCommentList(sql);
+			List<Comment> list = new ArrayList<Comment>();
+			try {
+				while(resSet.next()){
+					Comment comment = new Comment();
+					comment.setNewsId(resSet.getString(1));
+					comment.setTitle(resSet.getString(2));
+					comment.setCommentTime(resSet.getString(3));
+					comment.setContent(resSet.getString(4));
+					comment.setLike(resSet.getInt(5));
+					comment.setLou(resSet.getInt(6));
+					
+					list.add(comment);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}finally{
+				try {
+					resSet.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+				CommentBean commentBean = new CommentBean();
+				commentBean.setList(list);
+				out.println(gson.toJson(commentBean));
+
 		}
 		
 	}

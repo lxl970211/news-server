@@ -79,7 +79,11 @@ public class RequestUserInfoDB {
 	}
 	
 	
-	
+	/**
+	 * 获取用户收藏新闻列表
+	 * @param email
+	 * @return
+	 */
 	public List<Object> getUserCollectNewsList(String email){
 		List<Object> list = new ArrayList<Object>();
 		String sql = "select url, title, collectTime from news_user_collectnews where user_email='"+email+"';";
@@ -113,7 +117,8 @@ public class RequestUserInfoDB {
 	 */
 	public List<Comment> getAllCommentByUrl(String url){
 		List<Comment> list = new ArrayList<Comment>();
-		String sql = "select name, newsId, commentTime, content, zan, contra, lou from news_comment where newsId='"+url+"' ORDER BY commentTime DESC;";
+		String sql = "select name, newsId, title, commentTime, content, zan, lou"; 
+		sql += " from news_comment where newsId='"+url+"' ORDER BY commentTime DESC;";
 		conn = linkDb.link();
 		
 		try {
@@ -123,10 +128,10 @@ public class RequestUserInfoDB {
 				Comment comment = new Comment();
 				comment.setName(res.getString(1));
 				comment.setNewsId(res.getString(2));
-				comment.setCommentTime(res.getString(3));
-				comment.setContent(res.getString(4));
-				comment.setLike(res.getInt(5));
-				comment.setContra(res.getInt(6));
+				comment.setTitle(res.getString(3));
+				comment.setCommentTime(res.getString(4));
+				comment.setContent(res.getString(5));
+				comment.setLike(res.getInt(6));
 				comment.setLou(res.getInt(7));
 				list.add(comment);
 			}
@@ -163,6 +168,7 @@ public class RequestUserInfoDB {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
+			//关闭连接数据库
 			CloseDatabase.close(conn, prestate, res);
 		}
 		
@@ -233,10 +239,30 @@ public class RequestUserInfoDB {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally{
+			CloseDatabase.close(conn, prestate, res);
 		}
 		
 		
 		return list;
+		
+	}
+	
+	
+	
+	public ResultSet getUserCommentList(String sql){
+		
+		conn = linkDb.link();
+		try {
+			stat = conn.createStatement();
+			res = stat.executeQuery(sql);
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		
+		return res;
+		
 		
 	}
 	

@@ -3,6 +3,8 @@ package test;
 import static org.junit.Assert.*;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,4 +72,19 @@ public class RequestUserInfoDBTest {
 		}
 		
 	}
+	
+	@Test
+	public void getUserCommentListTest(){
+		String sql = "select newsId, title, commentTime, content, zan, lou from news_comment where news_email = 'root@outlook.com';";
+		
+		ResultSet res = requestUserInfoDB.getUserCommentList(sql);
+		try {
+			while(res.next()){
+				System.out.println(res.getString(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
