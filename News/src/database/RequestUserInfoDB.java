@@ -125,7 +125,7 @@ public class RequestUserInfoDB {
 				comment.setNewsId(res.getString(2));
 				comment.setCommentTime(res.getString(3));
 				comment.setContent(res.getString(4));
-				comment.setZan(res.getInt(5));
+				comment.setLike(res.getInt(5));
 				comment.setContra(res.getInt(6));
 				comment.setLou(res.getInt(7));
 				list.add(comment);
@@ -142,9 +142,38 @@ public class RequestUserInfoDB {
 	
 	
 	
+	/**
+	 * 得到赞的数量
+	 * @param newsId
+	 * @param lou
+	 * @return
+	 */
+	public int getLikeCount(String newsId, String lou){
+		String sqlString = "SELECT news_comment.zan FROM news_comment WHERE";
+		sqlString += " newsId ='"+newsId+"' AND lou = '"+lou+"';";
+		conn = linkDb.link();
+		
+		try {
+			stat = conn.createStatement();
+			res = stat.executeQuery(sqlString);
+			if (res.next()) {
+				return res.getInt(1);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			CloseDatabase.close(conn, prestate, res);
+		}
+		
+		
+		return 0;
+		
+	}
 	
-	public int getCommentCountByUrl(String url){
-		String sql = "select count(newsId) from news_comment where newsId='"+url+"';";
+	//获取任何表数据条数
+	public int getCount(String sql){
+		
 		conn = linkDb.link();
 		
 		try {
@@ -162,6 +191,52 @@ public class RequestUserInfoDB {
 		
 		
 		return 0;
+		
+	}
+	
+	//点赞
+	public boolean like(String token, String newsId, String lou){
+
+		//该评论的点赞数量
+		int likecount = getLikeCount(newsId, lou);
+		
+		String email = queryUserEmail(token);
+		
+		String update = "update news_comment set zan='"+(++likecount)+"' where newsId='"+newsId+"' and lou='"+lou+"';";
+		
+		
+		
+		if (linkDb.insertData(update)) {
+			//保存点赞记录，判断用户是否已点赞
+			String saveannal = "insert into news_like values('"+email+"', '"+newsId+"', '"+lou+"');";
+			linkDb.insertData(saveannal);
+			return true;
+		}
+		return false;
+		
+	}
+	
+	
+	public List<Integer> getuserZanList(String email, String newsId){
+		List<Integer> list = new ArrayList<Integer>();
+		String sql = "SELECT lou FROM news_like WHERE user_email = '"+email+"' AND newsId = '"+newsId+"' order by lou;";
+		conn = linkDb.link();
+		try {
+			stat = conn.createStatement();
+			res = stat.executeQuery(sql);
+			while(res.next()){
+				
+				int lou = res.getInt(1);
+				list.add(lou);
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return list;
 		
 	}
 	

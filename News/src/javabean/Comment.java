@@ -7,11 +7,11 @@ public class Comment {
 	    private String name;
 	    private String commentTime;
 	    private String content;
-	    private int zan;
+	    private int like;
 	    private String newsId;//以新闻url为id
 	    private int contra;
 	    private Integer lou;
-	    
+	    private String type;
 	    public String getToken() {
 	        return token;
 	    }
@@ -44,13 +44,12 @@ public class Comment {
 	        this.content = content;
 	    }
 
-	    public int getZan() {
-	        return zan;
-	    }
-
-	    public void setZan(int zan) {
-	        this.zan = zan;
-	    }
+		public void setLike(int like) {
+			this.like = like;
+		}
+		public int getLike() {
+			return like;
+		}
 
 	    public void setNewsId(String newsId) {
 	        this.newsId = newsId;
@@ -72,5 +71,14 @@ public class Comment {
 		}
 	    public void setLou(Integer lou) {
 			this.lou = lou;
+		}
+	    
+	    
+	    public void setType(String type) {
+			this.type = type;
+		}
+	    
+	    public String getType() {
+			return type;
 		}
 }

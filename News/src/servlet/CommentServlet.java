@@ -48,21 +48,31 @@ public class CommentServlet extends HttpServlet {
 		String newsId = request.getParameter("newsId");
 		String commentTime = request.getParameter("commentTime");
 		String content = request.getParameter("content");
+		String lou = request.getParameter("lou");
 		String sql = null;
+		
+		Responsecodes res = new Responsecodes();
+		Gson gson = new Gson();
+		
+		String email = requestUserInfoDB.queryUserEmail(token);
+		
+		
+		String queryAnnal = "select * from news_like where user_email='"+email+"' and lou='"+lou+"' and newsId='"+newsId+"'; ";
+		
 		if(type.equals("sendComment")){
-			
-			int lou = requestUserInfoDB.getCommentCountByUrl(newsId);
+			String querysql = "select count(newsId) from news_comment where newsId='"+newsId+"';";
+			int loucoumt = requestUserInfoDB.getCount(querysql);
 			
 			if(token != null){
 				if (Sql.queryToken(token)) {
 					User user = requestUserInfoDB.queryUserInfo(token);
-					sql = "insert into news_comment(name, news_email, newsId, commentTime, content, lou) values('"+user.getUserName()+"','"+user.getUserEmail()+"', '"+newsId+"', '"+commentTime+"', '"+content+"', '"+(++lou)+"');";
+					sql = "insert into news_comment(name, news_email, newsId, commentTime, content, lou) values('"+user.getUserName()+"','"+user.getUserEmail()+"', '"+newsId+"', '"+commentTime+"', '"+content+"', '"+(++loucoumt)+"');";
 				}
 			}else{
-				sql = "insert into news_comment(name, newsId, commentTime, content, lou) values('"+name+"', '"+newsId+"', '"+commentTime+"', '"+content+"', '"+(++lou)+"');";
+				sql = "insert into news_comment(name, newsId, commentTime, content, lou) values('"+name+"', '"+newsId+"', '"+commentTime+"', '"+content+"', '"+(++loucoumt)+"');";
 				
 			}
-			Responsecodes res = new Responsecodes();
+			
 			if (linkDb.insertData(sql)) {
 				
 				res.setStatus(Constant.COMMENT_AUCCESS);
@@ -75,13 +85,34 @@ public class CommentServlet extends HttpServlet {
 		}else if(type.equals("commentList")){
 			
 			List<Comment> list = requestUserInfoDB.getAllCommentByUrl(newsId);
-				Gson gson = new Gson();
+				
 				CommentBean commentBean = new CommentBean();
 				commentBean.setList(list);
 				commentBean.setCommentCount(list.size());
 				out.println(gson.toJson(commentBean));
+		}else if (type.equals("like")) {	//点赞
+			
+	
+			//查询是否已点赞  未点赞就添加点赞的数据 已点赞则取消点赞
+			if (!linkDb.queryData(queryAnnal)) {//未点赞
+				
+				if (requestUserInfoDB.like(token, newsId, lou)) {
+					//点赞成功
+					res.setStatus(1);
+					
+				}
+			}else{
+				int likecount = requestUserInfoDB.getLikeCount(newsId, lou);
+				//取消点赞
+				String dellike = "delete from news_like where user_email='"+email+"' and newsId='"+newsId+"' and lou='"+lou+"';";
+				String update = "update news_comment set zan='"+(--likecount)+"' where newsId='"+newsId+"' and lou='"+lou+"';";
+				if (linkDb.deleteData(dellike) && linkDb.insertData(update)){
+					res.setStatus(2);
+				}
+				
+			}
+			out.println(gson.toJson(res));
 		}
-		
 		
 	}
 
@@ -91,5 +122,5 @@ public class CommentServlet extends HttpServlet {
 		doGet(request, response);
 	}
 
-
+	
 }

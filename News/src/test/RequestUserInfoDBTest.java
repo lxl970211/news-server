@@ -9,6 +9,7 @@ import java.util.List;
 import javabean.CollectNewsBean;
 import javabean.CollectNewsData;
 import javabean.Comment;
+import javabean.CommentBean;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -53,13 +54,20 @@ public class RequestUserInfoDBTest {
 	
 	@Test
 	public void getAllCommentByUrlTest(){
-			String urlString = "http://mini.eastday.com/mobile/16100815552.html?qid=juheshuju";
-			System.out.println(requestUserInfoDB.getCommentCountByUrl(urlString));
-			int i = 0;
-			int a = 0;
-			System.out.println(i++);
-			System.out.println(++a);
-			System.out.println(i);
+			String sqlString = "SELECT news_comment.zan FROM news_comment WHERE name = 'root' AND newsId ='http://mini.eastday.com/mobile/161010114101555.html?qid=juheshuju' AND lou = 1";
+			System.out.println(requestUserInfoDB.getCount(sqlString));
 	}
-
+	
+	@Test 
+	public void getuserZanListTest(){
+		List<Integer> list = requestUserInfoDB.getuserZanList("root@outlook.com", "http://mini.eastday.com/mobile/161010170720853.html?qid=juheshuju");
+//		System.out.println(new Gson().toJson(list));
+		
+		String json = new Gson().toJson(list);
+		int[] i = new Gson().fromJson(json, int[].class);
+		for (int j = 0; j < i.length; j++) {
+			System.out.println(i[j]);
+		}
+		
+	}
 }

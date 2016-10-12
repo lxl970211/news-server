@@ -19,5 +19,9 @@ public class Constant {
     public static final int COMMENT_AUCCESS = 104;
     //评论失败
     public static final int COMMENT_ERROR = 105;
+    //赞成
+    public static final int ASSENT = 106;
+    //反对
+    public static final int CONTRA = 107;
 
 }
