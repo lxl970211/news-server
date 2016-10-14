@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+
 import utils.Utils;
 
 import database.LinkDb;
@@ -47,7 +49,24 @@ public class GetInfoServlet extends HttpServlet {
 		String token = request.getParameter("token");
 		String type = request.getParameter("type"); 
 		String path = "E:\\Graduation\\News\\WebRoot\\img\\userhead\\head.jpg";
-		if (Sql.queryToken(token)) {
+		if (type.equals("updateName")) {
+			Responsecodes res = new Responsecodes();
+			String newName = request.getParameter("newName");
+			String email = requestUserInfoDB.queryUserEmail(token);
+			
+			String sql = "update news_user set user_name='"+newName+"' where user_email='"+email+"';";
+			if (linkDb.insertData(sql)) {
+				res.setStatus(1);
+				
+			}else {
+				res.setStatus(0);
+			}
+			
+			out.println(new Gson().toJson(res));
+			
+			
+			
+		}else if (Sql.queryToken(token)) {
 			
 			if ("BasicInfo".equals(type)) {
 				User user = requestUserInfoDB.queryUserInfo(token);

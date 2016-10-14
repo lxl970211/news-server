@@ -87,4 +87,11 @@ public class RequestUserInfoDBTest {
 		}
 	}
 	
+	@Test
+	public void updateTest(){
+		String sql = "update news_user set user_name='½­³Ð' where user_email='root@outlook.com';";
+		System.out.println(new LinkDb().insertData(sql));
+		
+	}
+	
 }
