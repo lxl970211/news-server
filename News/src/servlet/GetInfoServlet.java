@@ -66,15 +66,13 @@ public class GetInfoServlet extends HttpServlet {
 			
 			
 			
-		}else if (Sql.queryToken(token)) {
-			
-			if ("BasicInfo".equals(type)) {
-				User user = requestUserInfoDB.queryUserInfo(token);
+		}else if(type.equals("BasicInfo")){
+			if (Sql.queryToken(token)) {
+					User user = requestUserInfoDB.queryUserInfo(token);
+					out.println(Utils.returnRequestJson(user));
 				
-				out.println(Utils.returnRequestJson(user));
+			
 			}
-			
-			
 			
 		}
 		
