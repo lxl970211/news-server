@@ -11,6 +11,8 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 
+import javabean.User;
+
 import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
 
@@ -37,10 +39,9 @@ public class UtilsTest {
 	}
 	
 	@Test
-	public void collectNewsList(){
-		
-		
-		
+	public void createPhotoFileNameTest(){
+		System.out.println(utils.createPhotoFileName());
 	}
+	
 
 }

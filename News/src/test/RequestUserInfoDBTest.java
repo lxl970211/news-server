@@ -2,6 +2,7 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +13,7 @@ import javabean.CollectNewsBean;
 import javabean.CollectNewsData;
 import javabean.Comment;
 import javabean.CommentBean;
+import javabean.User;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -87,11 +89,6 @@ public class RequestUserInfoDBTest {
 		}
 	}
 	
-	@Test
-	public void updateTest(){
-		String sql = "update news_user set user_name='½­³Ð' where user_email='root@outlook.com';";
-		System.out.println(new LinkDb().insertData(sql));
-		
-	}
+
 	
 }

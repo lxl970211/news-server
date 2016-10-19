@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.jms.Session;
 import javax.mail.internet.HeaderTokenizer.Token;
@@ -62,7 +64,14 @@ public class Utils {
 		
 	}
 	
-
+    /**创建图片不同的文件名**/
+    public String createPhotoFileName() {
+        String fileName = "";
+        Date date = new Date(System.currentTimeMillis());  //系统当前时间
+        SimpleDateFormat dateFormat = new SimpleDateFormat("'IMG'_yyyyMMdd_HHmmss");
+        fileName = dateFormat.format(date) + ".jpg";
+        return fileName;
+    }
 	
 	
 }

@@ -24,5 +24,8 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="D:/android/commons-fileupload-1.3.2.jar"/>
+	<classpathentry kind="lib" path="D:/android/commons-io-2.5.jar"/>
+	<classpathentry kind="lib" path="D:/android/smartupload.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
