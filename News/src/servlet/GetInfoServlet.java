@@ -48,7 +48,6 @@ public class GetInfoServlet extends HttpServlet {
 		
 		String token = request.getParameter("token");
 		String type = request.getParameter("type"); 
-		String path = "E:\\Graduation\\News\\WebRoot\\img\\userhead\\head.jpg";
 		if (type.equals("updateName")) {
 			Responsecodes res = new Responsecodes();
 			String newName = request.getParameter("newName");
@@ -68,16 +67,21 @@ public class GetInfoServlet extends HttpServlet {
 			
 		}else if(type.equals("BasicInfo")){
 			if (Sql.queryToken(token)) {
-					User user = requestUserInfoDB.queryUserInfo(token);
+				String email = requestUserInfoDB.queryUserEmail(token); 
+					User user = requestUserInfoDB.queryUserInfo(email);
+					if (user.getHeadPath() == null || user.getHeadPath().equals("")) {
+						
+					}else{
+						String headfileName = user.getHeadPath();
+						user.setHeadPath("/News/images/"+headfileName);
+						System.out.println(user.getUserName());
+					}
 					out.println(Utils.returnRequestJson(user));
-				
-			
+					
 			}
 			
 		}
 		
-		
-	  
 	}
 
 

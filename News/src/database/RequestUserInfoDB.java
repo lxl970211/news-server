@@ -112,13 +112,16 @@ public class RequestUserInfoDB {
 	 */
 	public List<Comment> getAllCommentByUrl(String url){
 		List<Comment> list = new ArrayList<Comment>();
-		String sql = "select name, newsId, title, commentTime, content, zan, lou"; 
-		sql += " from news_comment where newsId='"+url+"' ORDER BY commentTime DESC;";
+
+		String sqlString = "select name, newsId, title, commentTime, content";
+		sqlString += ", zan, lou, user_headpath from news_comment";
+		sqlString += " inner join news_user on news_comment.news_email = news_user.user_email";
+		sqlString += " where newsId = '"+url+"'";
 		conn = linkDb.link();
 		
 		try {
 			stat = conn.createStatement();
-			res = stat.executeQuery(sql);
+			res = stat.executeQuery(sqlString);
 			while (res.next()) {
 				Comment comment = new Comment();
 				comment.setName(res.getString(1));
@@ -128,6 +131,7 @@ public class RequestUserInfoDB {
 				comment.setContent(res.getString(5));
 				comment.setLike(res.getInt(6));
 				comment.setLou(res.getInt(7));
+				comment.setHead("/News/images/"+res.getString(8));
 				list.add(comment);
 			}
 			

@@ -55,9 +55,9 @@ public class UploadServlet extends HttpServlet {
 		SmartUpload smartUpload = new SmartUpload();
 		String msg=request.getParameter("msg");
 		 
-		 String token =request.getHeader("token");
+		String token =request.getHeader("token");
 		String email = new RequestUserInfoDB().queryUserEmail(token);
-//		out.print(msg);  
+		//		out.print(msg);  
         try {  
         	
             smartUpload.initialize(this.getServletConfig(), request, response); 
@@ -71,7 +71,8 @@ public class UploadServlet extends HttpServlet {
                 //保存头像
                 smartFile.saveAs(saveFileName+imgName, smartUpload.SAVE_PHYSICAL); 
                 
-                updateUserHeadInfoToDataBase(imgName, email);
+              updateUserHeadInfoToDataBase(imgName, email);
+        		
                 
                 System.out.print("ok:" + saveFileName+ ", msg:" + smartUpload.getRequest().getParameter("msg"));
             } else {  
@@ -91,8 +92,9 @@ public class UploadServlet extends HttpServlet {
 		//删除用户上一个头像文件
 		deleteLastHead(email);
 		//更新用户表信息
-        String updateUser = "update news_user set user_headpath='"+imgName+"' where user_email='"+email+"'";
+        String updateUser = "update news_user set user_headpath='"+imgName+"' where user_email='"+email+"';";
         linkDb.insertData(updateUser);
+		
 	}
 	 
     

@@ -45,13 +45,12 @@ public class RegisterServlet extends HttpServlet {
 				
 				
 				User user = new User();
-//				String name = new String(request.getParameter("user_name").getBytes("iso-8859-1"),"utf-8");
 				
 				user.setUserName(request.getParameter("user_name"));
 				user.setUserEmail(user_email);
 				user.setUserPassword(password);
 				
-				String sql = "insert into news_user(user_name,user_email,user_password) values('"+user.getUserName()+"', '"+user.getUserEmail()+"', '"+user.getUserPassword()+"');";
+				String sql = "insert into news_user(user_name,user_email,user_password, user_headpath) values('"+user.getUserName()+"', '"+user.getUserEmail()+"', '"+user.getUserPassword()+"', '');";
 				
 				int result = linkDb.insertData(sql) ? Constant.REGISTER_AUCCESS : Constant.REGISTER_ERROR;
 				

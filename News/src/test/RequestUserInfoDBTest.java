@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.text.DefaultEditorKit.InsertBreakAction;
+
 import javabean.CollectNewsBean;
 import javabean.CollectNewsData;
 import javabean.Comment;
@@ -77,16 +79,8 @@ public class RequestUserInfoDBTest {
 	
 	@Test
 	public void getUserCommentListTest(){
-		String sql = "select newsId, title, commentTime, content, zan, lou from news_comment where news_email = 'root@outlook.com';";
-		
-		ResultSet res = requestUserInfoDB.getUserCommentList(sql);
-		try {
-			while(res.next()){
-				System.out.println(res.getString(1));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		String updateUser = "update news_user set user_headpath='IMG_20161020_214143.jpg' where user_email='lxl@outlook.com';";
+        System.out.println(new LinkDb().insertData(updateUser));
 	}
 	
 

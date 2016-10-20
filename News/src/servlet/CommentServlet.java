@@ -72,7 +72,8 @@ public class CommentServlet extends HttpServlet {
 			
 			if(token != null){
 				if (Sql.queryToken(token)) {
-					User user = requestUserInfoDB.queryUserInfo(token);
+					String emails = requestUserInfoDB.queryUserEmail(token); 
+					User user = requestUserInfoDB.queryUserInfo(emails);
 					sql = "insert into news_comment(name, news_email, newsId, title, commentTime, content, lou)"; 
 					sql += "values('"+user.getUserName()+"','"+user.getUserEmail()+"', '"+newsId+"', '"+title+"', '"+commentTime+"', '"+content+"', '"+(++loucoumt)+"');";
 				}
@@ -81,7 +82,6 @@ public class CommentServlet extends HttpServlet {
 				sql += "values('"+name+"', '"+newsId+"', '"+title+"', '"+commentTime+"', '"+content+"', '"+(++loucoumt)+"');";
 				
 			}
-			
 			if (linkDb.insertData(sql)) {
 				//ÆÀÂÛ³É¹¦
 				res.setStatus(Constant.COMMENT_AUCCESS);

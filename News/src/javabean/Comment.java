@@ -11,6 +11,7 @@ public class Comment {
 	    private String newsId;//以新闻url为id
 	    private Integer lou;
 	    private String title;
+	    private String head;
 	    public String getToken() {
 	        return token;
 	    }
@@ -74,5 +75,14 @@ public class Comment {
 	    
 	    public String getTitle() {
 			return title;
+		}
+	    
+	    
+	    public void setHead(String head) {
+			this.head = head;
+		}
+	    
+	    public String getHead() {
+			return head;
 		}
 }
